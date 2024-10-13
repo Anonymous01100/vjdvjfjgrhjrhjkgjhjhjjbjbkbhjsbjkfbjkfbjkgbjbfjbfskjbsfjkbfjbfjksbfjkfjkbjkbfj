@@ -11,10 +11,11 @@ from flask_limiter.util import get_remote_address
 from datetime import datetime
 from pyngrok import ngrok
 
-# Constants for security
 KEY_LIST = ["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", "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", "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", "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"]  # Predefined keys to send upon verification
 
 USED_KEYS = set()  # Set to track used keys
+
+assigned_keys_cache = {}
 
 # External URL to fetch users.json (e.g., GitHub raw file URL)
 USER_DB_URL = 'https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/users.json'
@@ -116,14 +117,14 @@ def verify_user():
 
         # Verify password and token
         if password == user_data['password'] and token == user_data['token']:
-            # Check if the user already has a key
-            if 'assigned_key' in user_data and user_data['assigned_key']:
-                return jsonify({"status": "success", "key": user_data['assigned_key']}), 200
+            # Check if the user already has an assigned key in the cache
+            if username in assigned_keys_cache:
+                return jsonify({"status": "success", "key": assigned_keys_cache[username]}), 200
 
             # Find a free key and assign it
             key = find_free_key()
             if key:
-                user_data['assigned_key'] = key  # Remember in memory only
+                assigned_keys_cache[username] = key  # Cache the assigned key
                 return jsonify({"status": "success", "key": key}), 200
             else:
                 return jsonify({"status": "error", "message": "No keys available"}), 503
@@ -145,10 +146,9 @@ def logout_user():
 
         # Verify token
         if token == user_data['token']:
-            if 'assigned_key' in user_data and user_data['assigned_key']:
-                key = user_data['assigned_key']
+            if username in assigned_keys_cache:
+                key = assigned_keys_cache.pop(username)  # Remove from cache
                 release_key(key)  # Mark key as free
-                user_data['assigned_key'] = None  # Clear the assigned key in memory
                 return jsonify({"status": "success", "message": "Logged out successfully, key released"}), 200
             else:
                 return jsonify({"status": "error", "message": "No key assigned to this user"}), 400
