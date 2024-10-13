@@ -11,6 +11,7 @@ from flask_limiter.util import get_remote_address
 from datetime import datetime
 from pyngrok import ngrok
 
+# Constants for security
 KEY_LIST = ["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", "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", "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", "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"]  # Predefined keys to send upon verification
 
 USED_KEYS = set()  # Set to track used keys
@@ -25,6 +26,7 @@ users = {}
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')  # Ensure this is set securely
 REPO_NAME = "Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj"
 PUBLIC_URL_FILE_PATH = "public_url.json"
+
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -61,16 +63,20 @@ def is_account_expired(expiry_date):
 
 def find_free_key():
     """Find a free key from the list."""
+    print("Checking for available keys...")
     for key in KEY_LIST:
         if key not in USED_KEYS:
             USED_KEYS.add(key)
+            print(f"Key assigned: {key}")
             return key
+    print("No available keys.")
     return None  # No keys available
 
 def release_key(key):
     """Release a key so it's available for others."""
     if key in USED_KEYS:
         USED_KEYS.remove(key)
+        print(f"Key released: {key}")
 
 # Function to update public_url.json file in GitHub repository
 def update_github_public_url(url):
