@@ -178,5 +178,28 @@ def update_github_public_url(url):
     except Exception as e:
         print(f"Failed to update {PUBLIC_URL_FILE_PATH} in GitHub: {e}")
 
-# Fetch users initially
-fetch_users()
+def get_local_ip():
+    hostname = socket.gethostname()
+    return socket.gethostbyname(hostname)
+
+# Start the server
+if __name__ == '__main__':
+    # Check if ngrok token is available and set it
+    NGROK_TOKEN = os.getenv('NGROK_TOKEN')
+    if not NGROK_TOKEN:
+        print("Error: NGROK_TOKEN is not set. Please set your ngrok auth token.")
+        exit(1)
+
+    # Start ngrok and get the public URL
+    ngrok.set_auth_token(NGROK_TOKEN)
+    http_tunnel = ngrok.connect(5002)
+    public_url = http_tunnel.public_url
+    print(f"Ngrok tunnel created: {public_url}")
+
+    # Update public_url.json in the GitHub repo
+    update_github_public_url(public_url)
+
+    # Run Flask server
+    local_ip = get_local_ip()
+    print(f"Server is running on https://{local_ip}:5002")
+    app.run(host='0.0.0.0', port=5002, ssl_context='adhoc', debug=False)
