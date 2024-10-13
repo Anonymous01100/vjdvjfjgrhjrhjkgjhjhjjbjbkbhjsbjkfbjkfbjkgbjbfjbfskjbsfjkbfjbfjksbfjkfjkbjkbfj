@@ -1,0 +1,12 @@
+{
+    "BlackTechX": {
+        "password": "WormGPT_Demo",
+        "token": "7c46bfb7139c52bc41d8092cac645cf64f5ad2f8fc442278a6ed5c4fed3ad8cf",
+        "expiry_date": "2025-12-31",
+    },
+    "Jon": {
+        "password": "jonspassword123cantbehacked",
+        "token": "user-device-token-456",
+        "expiry_date": "2025-01-01",
+    }
+}
