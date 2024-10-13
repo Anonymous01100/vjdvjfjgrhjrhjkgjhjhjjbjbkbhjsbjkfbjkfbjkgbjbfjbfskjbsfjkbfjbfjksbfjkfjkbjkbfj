@@ -64,6 +64,7 @@ def is_account_expired(expiry_date):
 def find_free_key():
     """Find a free key from the list."""
     print("Checking for available keys...")
+    print(f"Current used keys: {USED_KEYS}")
     for key in KEY_LIST:
         if key not in USED_KEYS:
             USED_KEYS.add(key)
@@ -77,6 +78,19 @@ def release_key(key):
     if key in USED_KEYS:
         USED_KEYS.remove(key)
         print(f"Key released: {key}")
+    else:
+        print(f"Key {key} was not in the used keys set.")
+
+def reset_used_keys():
+    """Periodically clear the USED_KEYS set for debugging."""
+    while True:
+        time.sleep(300)  # Reset every 5 minutes for debugging
+        print("Resetting USED_KEYS...")
+        USED_KEYS.clear()
+
+# Start a thread to periodically reset USED_KEYS
+reset_thread = threading.Thread(target=reset_used_keys)
+reset_thread.start()
 
 # Function to update public_url.json file in GitHub repository
 def update_github_public_url(url):
