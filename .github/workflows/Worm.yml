@@ -30,11 +30,10 @@ jobs:
 
     - name: Run the Python Script
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token from repository secrets
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
         NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
       run: |
         python3 flask_app.py
-
 jobs:
   run_script:
     runs-on: ubuntu-latest
@@ -59,11 +58,10 @@ jobs:
 
     - name: Run the Python Script
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token from repository secrets
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
         NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
       run: |
         python3 flask_app.py
-
 jobs:
   run_script:
     runs-on: ubuntu-latest
@@ -88,7 +86,485 @@ jobs:
 
     - name: Run the Python Script
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token from repository secrets
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
         NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
       run: |
         python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pyngrok Flask Flask-Limiter PyGithub
+
+    - name: Download Python Script
+      run: |
+        # Replace with the raw URL of your Python script hosted on GitHub or elsewhere
+        curl -o flask_app.py https://raw.githubusercontent.com/Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj/refs/heads/main/main.py
+
+    - name: Run the Python Script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token from repository secrets
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}    # ngrok token from repository secrets
+      run: |
+        python3 flask_app.py
+
+
