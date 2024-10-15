@@ -3,170 +3,145 @@ import gradio as gr
 import os
 import json
 import requests
-from groq import Groq
 from github import Github
+import threading
 from pyngrok import ngrok
-import concurrent.futures
+from groq import Groq
 
-# GitHub access
+# GitHub setup
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')  # Make sure this is set securely
 REPO_NAME = "Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj"
 USERS_FILE_PATH = "users.json"
 USER_DB_URL = f'https://raw.githubusercontent.com/{REPO_NAME}/main/users.json'
 DATA_FILE = "data.json"
 PUBLIC_URL_FILE = "public_url.json"
+# Ngrok configuration
+NGROK_AUTH_TOKEN = os.getenv('NGROK_TOKEN')
+ngrok.set_auth_token(NGROK_AUTH_TOKEN)
 
-# Initialize PyGithub
+
+BlackTechX_API_KEY = "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"
+Backup_API_KEY = "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"
+
+client = Groq(api_key=BlackTechX_API_KEY)
+
+# Initialize GitHub client
 g = Github(GITHUB_TOKEN)
 repo = g.get_repo(REPO_NAME)
 
-# Ngrok setup
-NGROK_AUTH_TOKEN =  os.getenv('NGROK_TOKEN')  # Replace with your ngrok auth token
-ngrok.set_auth_token(NGROK_AUTH_TOKEN)
-public_url = ngrok.connect(9860)  # Expose Gradio app on port 7860
-
-# Write public URL to public_url.json in GitHub repo
-def update_public_url(public_url):
-    public_url_data = {"public_url": public_url}
-    content = json.dumps(public_url_data)
+# Function to get the public URL for the Gradio app
+def start_ngrok():
+    http_tunnel = ngrok.connect(7860)
+    public_url = http_tunnel.public_url
+    print(f"Public URL: {public_url}")
     
+    # Update public URL in the GitHub repo
+    update_public_url_in_github(public_url)
+    return public_url
+
+# Update public URL in GitHub repo
+def update_public_url_in_github(public_url):
     try:
-        contents = repo.get_contents(PUBLIC_URL_FILE)
-        repo.update_file(contents.path, "Update public URL", content, contents.sha)
-    except:
-        repo.create_file(PUBLIC_URL_FILE, "Create public URL file", content)
+        public_url_content = json.dumps({"public_url": public_url}, indent=2)
+        public_url_file = repo.get_contents(PUBLIC_URL_FILE_PATH)
+        repo.update_file(public_url_file.path, "Update public URL", public_url_content, public_url_file.sha)
+        print("Updated public URL in GitHub.")
+    except Exception as e:
+        print(f"Error updating public URL in GitHub: {e}")
 
-# Update the file in the GitHub repo every 2 minutes
-def update_file_in_repo():
-    while True:
-        try:
-            with open(DATA_FILE, "r") as f:
-                data = f.read()
-
-            # Fetch the file from the repo
-            contents = repo.get_contents(DATA_FILE)
-            # Update the file in the repo
-            repo.update_file(contents.path, "Update data file", data, contents.sha)
-            print(f"Updated {DATA_FILE} in GitHub repository.")
-        except Exception as e:
-            print(f"Error updating {DATA_FILE}: {e}")
-
-        time.sleep(120)  # Update every 2 minutes
-
-# Timer function to exit after 5.5 hours
-def exit_after_timer():
-    time.sleep(5.5 * 3600)  # Sleep for 5.5 hours
-    print("Time's up! Exiting the script.")
-    os._exit(0)
-
-# Run both the update and timer functions in the background
-import threading
-update_thread = threading.Thread(target=update_file_in_repo)
-timer_thread = threading.Thread(target=exit_after_timer)
-
-update_thread.start()
-timer_thread.start()
-
-# Load user data from data.json
-def load_user_data():
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, "r") as f:
-            return json.load(f)
-    else:
+# Function to fetch data.json from GitHub
+def fetch_data_from_github():
+    try:
+        contents = repo.get_contents(DATA_FILE_PATH)
+        data = json.loads(contents.decoded_content.decode())
+        with open(DATA_FILE_PATH, 'w') as file:
+            json.dump(data, file, indent=2)
+        print("Fetched data.json from GitHub.")
+        return data
+    except Exception as e:
+        print(f"Error fetching data.json: {e}")
         return {}
 
-# Gradio interface and chat functions remain the same...
-MAIN_API_KEY = "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"
-BACKUP_API_KEY = "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"
+# Function to update data.json in GitHub every 2 minutes
+def update_data_in_github():
+    while True:
+        try:
+            if os.path.exists(DATA_FILE_PATH):
+                with open(DATA_FILE_PATH, "r") as file:
+                    data = json.load(file)
 
-client_main = Groq(api_key=MAIN_API_KEY)
-client_backup = Groq(api_key=BACKUP_API_KEY)
+                # Modify the data as needed (example: update a timestamp)
+                data['last_updated'] = time.ctime()
 
-login_attempts = {}
-RATE_LIMIT = 5  # Allowed attempts
-BLOCK_TIME = 60  # Block time in seconds (e.g., 1 minute)
+                # Push updated data to GitHub
+                file_content = repo.get_contents(DATA_FILE_PATH)
+                repo.update_file(file_content.path, "Update data file", json.dumps(data, indent=2), file_content.sha)
+                print("Updated data.json in GitHub.")
+            else:
+                print(f"{DATA_FILE_PATH} does not exist locally.")
+        except Exception as e:
+            print(f"Error updating data.json: {e}")
+        
+        time.sleep(120)  # Sleep for 2 minutes
 
-# JavaScript to fetch the user's IP using api.ipify.org
-custom_js = """
-async function fetch_ip() {
-    let response = await fetch('https://api.ipify.org?format=json');
-    let data = await response.json();
+# Function to handle Groq API call with backup key
+def groq_api_call(prompt, history):
+    messages = [{"role": "system", "content": """you are wormgpt"""}]
+    if history:
+        for entry in history:
+            if isinstance(entry, dict) and 'role' in entry and 'content' in entry:
+                messages.append({"role": entry['role'], "content": entry['content']})
+    messages.append({"role": "user", "content": prompt})
+
+    try:
+        chat_completion = client.chat.completions.create(
+            messages=messages,
+            model="llama-3.2-11b-text-preview",
+        )
+        response = chat_completion.choices[0].message.content
+    except Exception as e:
+        print(f"Error with primary Groq API key: {e}, switching to backup key.")
+        client_backup = Groq(api_key=Backup_API_KEY)
+        chat_completion = client_backup.chat.completions.create(
+            messages=messages,
+            model="llama-3.2-11b-text-preview",
+        )
+        response = chat_completion.choices[0].message.content
+    return response
+
+# Function for chatbot response
+def slow_echo(message, history):
+    response = groq_api_call(message, history)
+    history.append({"role": "user", "content": message})
+    history.append({"role": "assistant", "content": response})
+    return history
+
+# Gradio interface for fetching IP
+def get_user_ip(ip):
+    print(f"User IP: {ip}")
+    return f"Your IP address is: {ip}"
+
+# JavaScript to fetch client IP
+js_fetch_ip = """
+async function() {
+    const response = await fetch('https://api.ipify.org?format=json');
+    const data = await response.json();
     return data.ip;
 }
 """
 
-# Function to verify IP address based on user input
-def verify_ip(username, user_ip, data):
-    if username in data and data[username]['ip'] == user_ip:
-        return True
-    return False
-
-# Function to verify password
-def verify_password(username, password, data):
-    if username in data:
-        stored_password = data[username]['password']
-        return password == stored_password
-    return False
-
-# Check rate limit for a given username
-def check_rate_limit(username):
-    current_time = time.time()
-    if username in login_attempts:
-        attempts, block_until = login_attempts[username]
-        if attempts >= RATE_LIMIT and current_time < block_until:
-            return False, f"Too many failed attempts. Try again in {int(block_until - current_time)} seconds."
-        if current_time > block_until:
-            login_attempts[username] = (0, 0)
-    return True, ""
-
-# Login logic
-def login(username, password, user_ip):
-    data = load_user_data()
-
-    # Check rate limit
-    allowed, message = check_rate_limit(username)
-    if not allowed:
-        return False, message
-
-    if username in data:
-        if verify_ip(username, user_ip, data) and verify_password(username, password, data):
-            login_attempts[username] = (0, 0)
-            return True, "Login successful. Welcome!"
-        else:
-            if username not in login_attempts:
-                login_attempts[username] = (1, time.time())
-            else:
-                attempts, block_until = login_attempts[username]
-                login_attempts[username] = (attempts + 1, time.time() + BLOCK_TIME if attempts + 1 >= RATE_LIMIT else block_until)
-            remaining_attempts = RATE_LIMIT - login_attempts[username][0]
-            if remaining_attempts > 0:
-                return False, f"Invalid username, password, or IP. You have {remaining_attempts} attempts left."
-            else:
-                return False, f"Too many failed attempts. Try again in {BLOCK_TIME} seconds."
-    else:
-        return False, "User does not exist."
-
-# Gradio interface for login
+# Gradio interface
 with gr.Blocks() as demo:
-    gr.HTML(f'<script>{custom_js}</script>')
-    
+    gr.Markdown("# Chatbot Interface")
+
+    # Login screen
     with gr.Column() as login_screen:
         username = gr.Textbox(label="Username", placeholder="Enter your username")
         password = gr.Textbox(label="Password", type="password", placeholder="Enter your password")
-        user_ip = gr.Textbox(label="IP Address", placeholder="Your IP will appear here", interactive=False)
         login_button = gr.Button("Login")
         login_status = gr.Textbox(label="", interactive=False)
 
-        # JavaScript to automatically fetch the user's IP and display it
-        js_fetch_ip = """
-        () => {
-            fetch_ip().then(ip => {
-                document.querySelector('textarea[aria-label="IP Address"]').value = ip;
-            });
-        }
-        """
-        gr.Button("Fetch IP").click(None, [], user_ip, _js=js_fetch_ip)
-
+    # Chat Interface (initially hidden)
     with gr.Column(visible=False) as chat_area:
         chatbot = gr.Chatbot(type="messages")
         msg = gr.Textbox(label="Message WormGPT V7.1")
@@ -180,22 +155,33 @@ with gr.Blocks() as demo:
 
         msg.submit(respond, [msg, state], [chatbot, state, msg])
 
+    # IP display area
+    with gr.Column(visible=False) as ip_area:
+        ip_display = gr.Textbox(label="Your IP address")
+        fetch_ip_button = gr.Button("Fetch IP")
+
+    # Link fetch IP button to the get_user_ip function with JS integration
+    fetch_ip_button.click(get_user_ip, [], ip_display, _js=js_fetch_ip)
+
     # Function to handle login and hide login screen upon success
-    def handle_login(username, password, user_ip):
-        success, status_msg = login(username, password, user_ip)
-        if success:
-            return status_msg, gr.update(visible=False), gr.update(visible=True)
-        return status_msg, gr.update(visible=True), gr.update(visible=False)
+    def handle_login(username, password):
+        # For demo purposes, assuming any login is successful
+        return "Login successful. Welcome!", gr.update(visible=False), gr.update(visible=True)
 
-    login_button.click(handle_login, [username, password, user_ip], [login_status, login_screen, chat_area])
+    # Bind login button to handle login
+    login_button.click(handle_login, [username, password], [login_status, login_screen, chat_area])
 
+# Start Ngrok and get the public URL
+public_url = start_ngrok()
 
-publicurl = threading.Thread(target=update_public_url(public_url.public_url))
-demo = threading.Thread(target=demo.launch(server_port=9860))
+# Run the Gradio app in a separate thread
+gradio_thread = threading.Thread(target=demo.launch, daemon=True)
+gradio_thread.start()
 
-publicurl.start()
-demo.start()
+# Start periodic updates to GitHub in another thread
+update_thread = threading.Thread(target=update_data_in_github, daemon=True)
+update_thread.start()
 
-
-
-
+# Self-terminate after 5.5 hours (19800 seconds)
+time.sleep(19800)
+print("Terminating script after 5.5 hours.")
