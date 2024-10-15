@@ -22,7 +22,7 @@ ngrok.set_auth_token(NGROK_AUTH_TOKEN)
 
 BlackTechX_API_KEY = "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"
 Backup_API_KEY = "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"
-
+ # Replace with your backup Groq API key
 client = Groq(api_key=BlackTechX_API_KEY)
 
 # Initialize GitHub client
@@ -116,14 +116,9 @@ def slow_echo(message, history):
     history.append({"role": "assistant", "content": response})
     return history
 
-# Gradio interface for fetching IP
-def get_user_ip(ip):
-    print(f"User IP: {ip}")
-    return f"Your IP address is: {ip}"
-
 # JavaScript to fetch client IP
 js_fetch_ip = """
-async function() {
+async () => {
     const response = await fetch('https://api.ipify.org?format=json');
     const data = await response.json();
     return data.ip;
@@ -160,8 +155,8 @@ with gr.Blocks() as demo:
         ip_display = gr.Textbox(label="Your IP address")
         fetch_ip_button = gr.Button("Fetch IP")
 
-    # Link fetch IP button to the get_user_ip function with JS integration
-    fetch_ip_button.click(get_user_ip, [], ip_display, _js=js_fetch_ip)
+    # Link fetch IP button to the get_user_ip function using JavaScript
+    fetch_ip_button.click(fn=None, inputs=[], outputs=ip_display, _js=js_fetch_ip)
 
     # Function to handle login and hide login screen upon success
     def handle_login(username, password):
