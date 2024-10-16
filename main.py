@@ -9,7 +9,7 @@ from pyngrok import ngrok
 from github import Github
 from datetime import datetime, timedelta
 
-
+# GitHub and Ngrok configurations
 REPO_NAME = "Anonymous01100/vjdvjfjgrhjrhjkgjhjhjjbjbkbhjsbjkfbjkfbjkgbjbfjbfskjbsfjkbfjbfjksbfjkfjkbjkbfj"
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')  # Replace with a secure way to get the GitHub token
 DATA_URL = f"https://raw.githubusercontent.com/{REPO_NAME}/main/data.json"
@@ -57,6 +57,66 @@ def setup_ngrok_and_update_github():
         print("Updated public_url.json in the repository.")
     except Exception as e:
         print(f"Failed to update public_url.json: {e}")
+
+# Load user data from data.json
+def load_user_data():
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, "r") as f:
+            return json.load(f)
+    else:
+        return {}
+
+# Verify password and account expiration
+def verify_password_and_expiration(username, password, data):
+    if username in data:
+        stored_password = data[username].get('password')
+        expiration_date_str = data[username].get('expiration_date')
+
+        # Check password
+        if password != stored_password:
+            return False, "Invalid password."
+
+        # Check account expiration
+        if expiration_date_str:
+            expiration_date = datetime.strptime(expiration_date_str, "%Y-%m-%d")
+            if datetime.now() > expiration_date:
+                return False, "Account has expired."
+
+        return True, "Login successful. Welcome!"
+    return False, "User does not exist."
+
+# Check rate limit for username
+def check_rate_limit(username):
+    current_time = time.time()
+    if username in login_attempts:
+        attempts, block_until = login_attempts[username]
+        if attempts >= RATE_LIMIT and current_time < block_until:
+            return False, f"Too many failed attempts. Try again in {int(block_until - current_time)} seconds."
+        if current_time > block_until:
+            login_attempts[username] = (0, 0)  # Reset after block expires
+    return True, ""
+
+# Login logic with rate limiting and expiration check
+def login(username, password):
+    data = load_user_data()
+
+    # Check rate limit
+    allowed, message = check_rate_limit(username)
+    if not allowed:
+        return False, message
+
+    # Verify password and account expiration
+    success, status_msg = verify_password_and_expiration(username, password, data)
+    if success:
+        login_attempts[username] = (0, 0)  # Reset attempts on successful login
+        return True, status_msg
+    else:
+        if username not in login_attempts:
+            login_attempts[username] = (1, time.time())
+        else:
+            attempts, block_until = login_attempts[username]
+            login_attempts[username] = (attempts + 1, time.time() + BLOCK_TIME if attempts + 1 >= RATE_LIMIT else block_until)
+        return False, status_msg
 
 # Function to handle API call with Groq and attempt with backup key if primary fails
 def groq(prompt, history):
@@ -164,6 +224,7 @@ with gr.Blocks() as demo:
     # Bind login button to handle login
     login_button.click(handle_login, [username, password], [login_status, login_screen, chat_area])
 
+# Start the data update thread
 print(" Start the data update thread")
 data_update_thread = threading.Thread(target=update_data_json, daemon=True)
 data_update_thread.start()
