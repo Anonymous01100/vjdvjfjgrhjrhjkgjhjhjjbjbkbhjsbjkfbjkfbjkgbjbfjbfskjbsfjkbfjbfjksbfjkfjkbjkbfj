@@ -238,7 +238,7 @@ demo_thread = threading.Thread(target=demo.launch(), daemon=True)
 demo_thread.start()
 
 print("Timer to exit after 5.5 hours")
-def timer()
+def timer():
     end_time = datetime.now() + timedelta(hours=5.5)
     while datetime.now() < end_time:
         time.sleep(1)
