@@ -224,6 +224,16 @@ with gr.Blocks() as demo:
     # Bind login button to handle login
     login_button.click(handle_login, [username, password], [login_status, login_screen, chat_area])
 
+print("Timer to exit after 5.5 hours")
+def timer():
+    end_time = datetime.now() + timedelta(hours=5.5)
+    while datetime.now() < end_time:
+        time.sleep(1)
+    print("Script execution time of 5.5 hours is over. Exiting now.")
+
+timer_thread = threading.Thread(target=timer(), daemon=True)
+timer_thread.Start()
+
 # Start the data update thread
 print(" Start the data update thread")
 data_update_thread = threading.Thread(target=update_data_json, daemon=True)
@@ -237,12 +247,3 @@ print("Launch Gradio app")
 demo_thread = threading.Thread(target=demo.launch(), daemon=True)
 demo_thread.start()
 
-print("Timer to exit after 5.5 hours")
-def timer():
-    end_time = datetime.now() + timedelta(hours=5.5)
-    while datetime.now() < end_time:
-        time.sleep(1)
-    print("Script execution time of 5.5 hours is over. Exiting now.")
-
-timer_thread = threading.Thread(target=timer(), daemon=True)
-timer_thread.Start()
